@@ -1,24 +1,38 @@
-# README
+1. Project Title & Overview
+Title: Rails-Fabric Drawing App (Internal Code: Structure-Canvas-v1)
+Description: Ruby on RailsとFabric.jsを高度に統合した、永続的描画プラットフォーム。単なるお絵描きツールではなく、フロントエンドのステート（JSON）とバックエンドのデータベース（PostgreSQL）を同期させ、描画プロセスを「構造データ」として管理することに焦点を当てています。
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+2. Key Features (技術的特徴)
+Persistent Canvas: canvas_dataをJSON形式でDB保存。リロード後も即座に構造を復元。
 
-Things you may want to cover:
+History Management: Undo/Redoスタックの実装による非破壊的な編集環境。
 
-* Ruby version
+Multi-Format Export: toDataURLを用いたクライアントサイドでのPNG書き出し機能。
 
-* System dependencies
+Dynamic Tooling: カスタムカラーピッカー、ブラシサイズ制御、消しゴムモードのシームレスな切り替え。
 
-* Configuration
+3. Tech Stack (技術スタック)
+Backend: Ruby on Rails 8.0 (Modern Rails)
 
-* Database creation
+Frontend: JavaScript (Stimulus), Tailwind CSS
 
-* Database initialization
+Canvas Engine: Fabric.js (Object-oriented canvas library)
 
-* How to run the test suite
+Database: PostgreSQL
 
-* Services (job queues, cache servers, search engines, etc.)
+Asset Pipeline: Propshaft / Importmap
 
-* Deployment instructions
+4. Logical Structure (思想・構造)
+このプロジェクトは、描画を単なる「ピクセルの集合」ではなく、「オブジェクトの配列（構造体）」として捉えています。
 
-* ...
+Model: Artworkクラスがキャンバスの状態をtext型で保持。
+
+Controller (Stimulus): キャンバス上のイベント（path:created等）をトリガーに、非同期（fetch）でRailsへ状態をパッチ。
+
+5. Setup / Installation
+Bash
+git clone https://github.com/hirof35/drawing_app.git
+cd drawing_app
+bundle install
+bin/rails db:prepare
+bin/rails s
