@@ -1,0 +1,42 @@
+<h1>Artworks#show</h1>
+<p>Find me in app/views/artworks/show.html.erb</p>
+<div data-controller="canvas" 
+     data-canvas-id-value="<%= @artwork.id %>"
+     data-canvas-current-user-id-value="<%= current_user.id %>"
+     class="flex flex-col md:flex-row gap-6 p-4 bg-gray-50 min-h-screen">
+
+  <aside class="w-full md:w-64 flex flex-col gap-4">
+    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+      <h3 class="text-sm font-bold mb-3 text-gray-700">ツール</h3>
+      <div class="grid grid-cols-2 gap-2">
+        <button data-action="click->canvas#setMode" data-canvas-target="toolButton" data-mode="pencil" class="p-2 border-2 rounded-lg transition-all border-blue-500 bg-blue-50">🖌️ ペン</button>
+        <button data-action="click->canvas#setMode" data-canvas-target="toolButton" data-mode="eraser" class="p-2 border-2 rounded-lg transition-all border-transparent">🧽 消しゴム</button>
+      </div>
+      
+      <div class="mt-4">
+        <div class="flex items-center justify-between mb-2">
+          <label class="text-xs font-bold text-gray-500">太さ</label>
+          <span class="text-xs font-mono bg-gray-100 px-1 rounded" data-canvas-target="widthDisplay">5</span>
+        </div>
+        <div class="h-12 flex items-center justify-center border rounded mb-2 bg-gray-50">
+          <div data-canvas-target="brushPreview" class="bg-black rounded-full w-2 h-2"></div>
+        </div>
+        <input type="range" min="1" max="100" value="5" data-action="input->canvas#changeWidth" class="w-full">
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <button data-action="click->canvas#undo" class="w-full py-2 bg-white border rounded-lg shadow-sm hover:bg-gray-50">↩️ やり直し (Ctrl+Z)</button>
+      <button data-action="click->canvas#save" class="w-full py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 font-bold">💾 サーバーに保存</button>
+      <button data-action="click->canvas#share" class="w-full py-2 bg-black text-white rounded-lg shadow-md hover:opacity-80 font-bold">𝕏 作品をシェア</button>
+    </div>
+  </aside>
+
+  <main class="flex-1 relative">
+    <div class="inline-block bg-white shadow-2xl rounded-lg overflow-hidden border border-gray-300 relative">
+      <canvas data-canvas-target="canvasElement"></canvas>
+      <div data-canvas-target="cursorContainer" class="absolute inset-0 pointer-events-none"></div>
+    </div>
+    <p class="text-xs text-gray-400 mt-2">※マウスホイールでズーム、Alt+ドラッグで移動</p>
+  </main>
+</div>

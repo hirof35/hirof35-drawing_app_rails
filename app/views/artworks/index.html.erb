@@ -1,0 +1,81 @@
+<h1>お絵描きアプリ</h1>
+
+<%# 親要素にコントローラーとデータを集約します %>
+<div data-controller="canvas"
+     data-canvas-id-value="<%= @artwork.id %>"
+     data-canvas-initial-data="<%= @artwork.canvas_data %>"
+     data-canvas-current-user-id-value="1"
+     class="flex flex-col md:flex-row gap-6 p-4 bg-gray-50 min-h-screen">
+  
+  <aside class="w-full md:w-64 flex flex-col gap-4">
+    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+      <h3 class="text-sm font-bold mb-3 text-gray-700">ツール</h3>
+      
+      <div class="grid grid-cols-2 gap-2 mb-4">
+        <button data-action="click->canvas#setPen" data-canvas-target="toolButton" class="p-2 border-2 rounded-lg transition-all border-blue-500 bg-blue-50">🖌️ ペン</button>
+        <button data-action="click->canvas#setEraser" data-canvas-target="toolButton" class="p-2 border-2 rounded-lg transition-all border-gray-200 bg-white">🧽 消しゴム</button>
+      </div>
+
+      <%# カラーセクション %>
+      <div class="border-t pt-4">
+        <h3 class="text-sm font-bold mb-3 text-gray-700">カラー</h3>
+        <div class="grid grid-cols-5 gap-2 mb-4">
+          <% ['#000000', '#ef4444', '#22c55e', '#3b82f6', '#eab308'].each do |color| %>
+            <button 
+              data-action="click->canvas#setColor" 
+              data-color="<%= color %>"
+              class="w-6 h-6 rounded-full border border-gray-200 shadow-sm hover:scale-110 transition-transform"
+              style="background-color: <%= color %>;">
+            </button>
+          <% end %>
+        </div>
+
+        <div class="flex items-center gap-2 mb-4">
+          <label class="text-xs font-bold text-gray-500">カスタム:</label>
+          <input type="color" 
+                 data-action="input->canvas#setColor" 
+                 class="w-full h-8 rounded cursor-pointer bg-transparent border-none">
+        </div>
+      </div>
+      
+      <%# 太さセクション %>
+      <div class="border-t pt-4">
+        <div class="flex items-center justify-between mb-2">
+          <label class="text-xs font-bold text-gray-500">太さ</label>
+          <span class="text-xs font-mono bg-gray-100 px-1 rounded" data-canvas-target="widthDisplay">5</span>
+        </div>
+        <div class="h-12 flex items-center justify-center border rounded mb-2 bg-gray-50">
+          <div data-canvas-target="brushPreview" class="bg-black rounded-full w-2 h-2"></div>
+        </div>
+        <input type="range" min="1" max="100" value="5" data-action="input->canvas#changeWidth" class="w-full">
+      </div>
+    </div>
+
+    <%# アクションボタン %>
+    <div class="flex flex-col gap-2">
+      <button data-action="click->canvas#undo" class="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors shadow-sm text-sm font-medium">
+        <span>↩️</span> やり直し (Ctrl+Z)
+      </button>
+
+      <button data-action="click->canvas#save" class="w-full py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 font-bold">💾 サーバーに保存</button>
+      <button data-action="click->canvas#share" class="w-full py-2 bg-black text-white rounded-lg shadow-md hover:opacity-80 font-bold">𝕏 作品をシェア</button>
+      <div class="flex flex-col gap-2">
+  <%# --- 追加：ダウンロードボタン --- %>
+  <button data-action="click->canvas#download" class="w-full py-2 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 font-bold flex items-center justify-center gap-2">
+    <span>📥</span> 画像として保存 (PNG)
+  </button>
+
+  <button data-action="click->canvas#undo" class="..."> ... </button>
+  <button data-action="click->canvas#save" class="..."> ... </button>
+</div>
+    </div>
+  </aside>
+
+  <main class="flex-1 relative">
+    <div class="inline-block bg-white shadow-2xl rounded-lg overflow-hidden border border-gray-300 relative">
+      <canvas data-canvas-target="canvasElement" id="canvas" width="800" height="600" class="border"></canvas>
+      <div data-canvas-target="cursorContainer" class="absolute inset-0 pointer-events-none"></div>
+    </div>
+    <p class="text-xs text-gray-400 mt-2">※マウスホイールでズーム、Alt+ドラッグで移動</p>
+  </main>
+</div>
